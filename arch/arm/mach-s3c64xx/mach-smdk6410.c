@@ -27,6 +27,8 @@
 #include <linux/delay.h>
 #include <linux/smsc911x.h>
 #include <linux/regulator/fixed.h>
+#include <linux/gpio_keys.h>
+#include <linux/input.h>
 
 #ifdef CONFIG_SMDK6410_WM1190_EV1
 #include <linux/mfd/wm8350/core.h>
@@ -214,62 +216,100 @@ static struct s3c2410_platform_nand ok6410_nand_info = {
 };
 
 static struct gpio_led ok6410_leds[] ={
-
     [0]= {
-
         .name = "LED1",
-
         .gpio = S3C64XX_GPM(0),
-
         },
 
     [1]= {
-
         .name = "LED2",
-
         .gpio = S3C64XX_GPM(1),
-
         },
 
     [2]= {
-
         .name = "LED3",
-
         .gpio = S3C64XX_GPM(2),
-
         },
 
     [3]= {
-
         .name = "LED4",
-
         .gpio = S3C64XX_GPM(3),
-
         },    
 
 };
 
 static struct gpio_led_platform_data ok6410_gpio_led_pdata ={
-
     .num_leds    = ARRAY_SIZE(ok6410_leds),
-
     .leds         =ok6410_leds,
 
 };
 
 static struct platform_device ok6410_device_led ={
-
     .name    = "leds-gpio",
-
     .id        = -1,
-
     .dev    ={
-
     .platform_data = &ok6410_gpio_led_pdata,
+    },
+};
+
+static struct gpio_keys_button ok6410_buttons[] = {
+    {
+        .gpio        = S3C64XX_GPN(0),
+        .code        = KEY_UP,
+        .desc        = "Up",
+        .active_low    = 1,
+        .wakeup        = 0,
+    },
+    {
+        .gpio        = S3C64XX_GPN(1),
+        .code        = KEY_DOWN,
+        .desc        = "Down",
+        .active_low    = 1,
+        .wakeup        = 0,
 
     },
+    {
+        .gpio        = S3C64XX_GPN(2),
+        .code        = KEY_LEFT,
+        .desc        = "Left",
+        .active_low    = 1,
+        .wakeup        = 0,
+    },
+    {
+        .gpio        = S3C64XX_GPN(3),
+        .code        = KEY_RIGHT,
+        .desc        = "Right",
+        .active_low    = 1,
+        .wakeup        = 0,
+    },
+    {
+        .gpio        = S3C64XX_GPN(4),
+        .code        = KEY_ENTER,
+        .desc        = "Enter",
+        .active_low    = 1,
+        .wakeup        = 0,
+    },
+    {
+        .gpio        = S3C64XX_GPN(5),
+        .code        = KEY_ESC,
+        .desc        = "Esc",
+        .active_low    = 1,
+        .wakeup        = 0,
+    }
+};
 
-}; 
+static struct gpio_keys_platform_data ok6410_button_data ={
+    .buttons    =ok6410_buttons,
+    .nbuttons    =ARRAY_SIZE(ok6410_buttons),
+};
+
+static struct platform_device ok6410_device_button    = {
+    .name        ="gpio-keys",
+    .id            = -1,
+    .dev        = {
+    .platform_data =&ok6410_button_data,
+    },
+};  
 /*
  * Configuring Ethernet on SMDK6410
  *
@@ -369,6 +409,7 @@ static struct platform_device *smdk6410_devices[] __initdata = {
 	&smdk6410_b_pwr_5v,
 #endif
 	&smdk6410_lcd_powerdev,
+    &ok6410_device_button,
 
 	&smdk6410_smsc911x,
 	&s3c_device_adc,

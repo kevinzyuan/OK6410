@@ -20,13 +20,13 @@
 static struct resource s3c_nand_resource[] = {
 	[0] = {
 		.start = S3C_PA_NAND,
-		.end   = S3C_PA_NAND + SZ_1M,
+		.end   = S3C_PA_NAND + SZ_1M-1,   // gjl
 		.flags = IORESOURCE_MEM,
 	}
 };
 
 struct platform_device s3c_device_nand = {
-	.name		  = "s3c2410-nand",
+        .name		  = "s3c6410-nand",
 	.id		  = -1,
 	.num_resources	  = ARRAY_SIZE(s3c_nand_resource),
 	.resource	  = s3c_nand_resource,

@@ -149,7 +149,6 @@ static struct platform_device smdk6410_lcd_powerdev = {
 static struct s3c_fb_pd_win smdk6410_fb_win0 = {
 	/* this is to ensure we use win0 */
 	.win_mode	= {
-		.pixclock	= 41094,
 		.left_margin	= 8,
 		.right_margin	= 13,
 		.upper_margin	= 7,
@@ -161,6 +160,8 @@ static struct s3c_fb_pd_win smdk6410_fb_win0 = {
 	},
 	.max_bpp	= 32,
 	.default_bpp	= 16,
+	.virtual_y	= 480 * 2,
+	.virtual_x	= 800,
 };
 
 /* 405566 clocks per frame => 60Hz refresh requires 24333960Hz clock */
@@ -389,7 +390,15 @@ static struct platform_device smdk6410_b_pwr_5v = {
 };
 #endif
 
-static struct map_desc smdk6410_iodesc[] = {};
+static struct map_desc smdk6410_iodesc[] = {
+    {
+        /* LCD support */
+        .virtual = (unsigned long)S3C_VA_LCD,
+        .pfn = __phys_to_pfn(S3C_PA_FB),
+        .length = SZ_16K,
+        .type = MT_DEVICE,
+     }, 
+};
 
 static struct platform_device *smdk6410_devices[] __initdata = {
 #ifdef CONFIG_SMDK6410_SD_CH0

@@ -439,7 +439,7 @@ static struct map_desc smdk6410_iodesc[] = {
 
 static struct platform_device *smdk6410_devices[] __initdata = {
 #ifdef CONFIG_SMDK6410_SD_CH0
-	&s3c_device_hsmmc0,
+	//&s3c_device_hsmmc0,
 #endif
 #ifdef CONFIG_SMDK6410_SD_CH1
 	&s3c_device_hsmmc1,
@@ -452,13 +452,13 @@ static struct platform_device *smdk6410_devices[] __initdata = {
 	&s3c64xx_device_iisv4,
 
 #ifdef CONFIG_REGULATOR
-	&smdk6410_b_pwr_5v,
+//	&smdk6410_b_pwr_5v,
 #endif
-	&smdk6410_lcd_powerdev,
+//	&smdk6410_lcd_powerdev,
     &ok6410_device_button,
 
-	&smdk6410_smsc911x,
-	&s3c_device_adc,
+//	&smdk6410_smsc911x,
+//	&s3c_device_adc,
 	&s3c_device_nand,   // gjl 
     &ok6410_device_led,
 	&s3c_device_dm9000,
